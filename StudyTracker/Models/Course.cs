@@ -8,5 +8,4 @@
 
         public ICollection<Subject> Subjects { get; set; }
     }
-
 }

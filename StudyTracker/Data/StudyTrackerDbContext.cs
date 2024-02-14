@@ -17,11 +17,11 @@ namespace StudyTracker.Data
 
         public DbSet<User> Users { get; set; }
 
-        public DbSet<Subject> Subjects { get; set; }
+        public virtual DbSet<Subject> Subjects { get; set; }
 
-        public DbSet<Course> Courses { get; set; }
+        public virtual DbSet<Course> Courses { get; set; }
 
-        public DbSet<Assignment> Assignments { get; set; }
+        public virtual DbSet<Assignment> Assignments { get; set; }
 
     }
 }
