@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34525.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyTracker", "StudyTracker\StudyTracker.csproj", "{492940BF-6190-4B27-BAFC-E40008E90C4C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudyTracker", "StudyTracker\StudyTracker.csproj", "{492940BF-6190-4B27-BAFC-E40008E90C4C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyTracker.Tests", "StudyTracker.Tests\StudyTracker.Tests.csproj", "{9CC36A64-7DBF-4EC4-BDB8-55919E7A2858}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{492940BF-6190-4B27-BAFC-E40008E90C4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{492940BF-6190-4B27-BAFC-E40008E90C4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{492940BF-6190-4B27-BAFC-E40008E90C4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CC36A64-7DBF-4EC4-BDB8-55919E7A2858}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CC36A64-7DBF-4EC4-BDB8-55919E7A2858}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CC36A64-7DBF-4EC4-BDB8-55919E7A2858}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CC36A64-7DBF-4EC4-BDB8-55919E7A2858}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
