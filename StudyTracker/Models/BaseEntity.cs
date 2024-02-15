@@ -10,7 +10,8 @@ namespace StudyTracker.Models
         [Display(Name = "Date Added")]
         [ScaffoldColumn(false)]
         [HiddenInput(DisplayValue = false)]
-        public DateTime DateAdded { get; set; }
+        [Required]
+        public DateTime DateAdded { get; set; } = DateTime.Now;
 
         [ReadOnly(true)]
         [Display(Name = "Date Modified")]
