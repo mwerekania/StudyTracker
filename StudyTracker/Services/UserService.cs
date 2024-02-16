@@ -139,7 +139,7 @@ namespace StudyTracker.Services
                     _dbcontext.Users.Update(userOnFile);
                     _dbcontext.SaveChanges();
                     errorMessage = "";
-                    return user;
+                    return userOnFile;
                 }
             }
             catch (System.Exception ex)
@@ -158,6 +158,11 @@ namespace StudyTracker.Services
                 if (user == null)
                 {
                     errorMessage = "User not found!";
+                    return null;
+                }
+                else if (user.IsVerified)
+                {
+                    errorMessage = "User already verified!";
                     return null;
                 }
                 else

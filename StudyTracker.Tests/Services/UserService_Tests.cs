@@ -192,10 +192,289 @@ namespace StudyTracker.Tests
         }
 
 
+        /* -------------------------------------------------------------------------------------
+         *  Update User Tests
+         * ------------------------------------------------------------------------------------*/
+        // Test UpdateUser method for a user that does not exist
+        [TestMethod()]
+        public void UpdateUser_Test_UserDoesNotExist()
+        {
+            // Arrange
+            var service = new UserService(_dbContext);
+            var user = new User
+            {
+                UserId = 1,
+                FirstName = "James",
+                LastName = "Mugambi",
+                Email = ""
+            };
 
+            // Act
+            var updatedUser = service.UpdateUser(user, out string errorMessage);
 
+            // Assert
+            Assert.IsNull(updatedUser);
+            Assert.AreEqual("User not found!", errorMessage);
+        }
 
+        // Test UpdateUser method for a user that exists
+        [TestMethod()]
+        public void UpdateUser_Test_UserExists()
+        {
+            // Arrange
+            var service = new UserService(_dbContext);
+            var user = new User
+            {
+                UserId = 2,
+                FirstName = "James",
+                LastName = "Mugambi",
+                Email = "james@mugambi.me",
+                UserName = "james"
 
+            };
+
+            // Act
+            var updatedUser = service.UpdateUser(user, out string errorMessage);
+
+            // Assert
+            Assert.IsNotNull(updatedUser);
+        }
+
+        // Test UpdateUser method for exception handling
+        [TestMethod()]
+        public void UpdateUser_Test_Exception()
+        {
+            // Arrange
+            var service = new UserService(_dbContextFake);
+            var user = new User
+            {
+                UserId = 2,
+                FirstName = "James",
+                LastName = "Mugambi",
+                Email = ""
+            };
+
+            // Act
+            var updatedUser = service.UpdateUser(user, out string errorMessage);
+
+            // Assert
+            Assert.IsNull(updatedUser);
+            Assert.IsNotNull(errorMessage);
+        }
+
+        // Test UpdateUser method for a user that exists and is changing email
+        [TestMethod()]
+        public void UpdateUser_Test_ChangeEmail()
+        {
+            // Arrange
+            var service = new UserService(_dbContext);
+            var user = new User
+            {
+                UserId = 1002,
+                FirstName = "Kabon",
+                LastName = "Kredit",
+                Email = "Kabon@credits.me"
+            };
+
+            // Act
+            var updatedUser = service.UpdateUser(user, out string errorMessage);
+
+            // Assert
+            Assert.IsNull(updatedUser);
+            Assert.AreEqual("Email already exists!", errorMessage);
+        }
+
+        // Test UpdateUser method for a user that exists and is changing username
+        [TestMethod()]
+        public void UpdateUser_Test_ChangeUserName()
+        {
+            // Arrange
+            var service = new UserService(_dbContext);
+            var user = new User
+            {
+                UserId = 1003,
+                FirstName = "Kabon",
+                LastName = "Kredit",
+                UserName =  "joe"
+            };
+
+            // Act
+            var updatedUser = service.UpdateUser(user, out string errorMessage);
+
+            // Assert
+            Assert.IsNull(updatedUser);
+            Assert.AreEqual("Username already exists!", errorMessage);
+        }
+
+        /* -------------------------------------------------------------------------------------
+         *  Verify User Tests
+         *  ------------------------------------------------------------------------------------*/
+        // Test VerifyUser method for a user that exists
+        [TestMethod()]
+        public void VerifyUser_Test_UserExists()
+        {
+            // Arrange
+            var service = new UserService(_dbContext);
+            var userId = 5;
+
+            // Act
+            var verifiedUser = service.VerifyUser(userId, out string errorMessage);
+
+            // Assert
+            Assert.IsNotNull(verifiedUser);
+        }
+
+        // Test VerifyUser method for a user that does not exist
+        [TestMethod()]
+        public void VerifyUser_Test_UserDoesNotExist()
+        {
+            // Arrange
+            var service = new UserService(_dbContext);
+            var userId = 100;
+
+            // Act
+            var verifiedUser = service.VerifyUser(userId, out string errorMessage);
+
+            // Assert
+            Assert.IsNull(verifiedUser);
+            Assert.AreEqual("User not found!", errorMessage);
+        }
+
+        // Test VerifyUser method for exception handling
+        [TestMethod()]
+        public void VerifyUser_Test_Exception()
+        {
+            // Arrange
+            var service = new UserService(_dbContextFake);
+            var userId = 5;
+
+            // Act
+            var verifiedUser = service.VerifyUser(userId, out string errorMessage);
+
+            // Assert
+            Assert.IsNull(verifiedUser);
+            Assert.IsNotNull(errorMessage);
+        }
+
+        // Test VerifyUser method for a user that is already verified
+        [TestMethod()]
+        public void VerifyUser_Test_UserAlreadyVerified()
+        {
+            // Arrange
+            var service = new UserService(_dbContext);
+            var userId = 2;
+
+            // Act
+            var verifiedUser = service.VerifyUser(userId, out string errorMessage);
+
+            // Assert
+            Assert.IsNull(verifiedUser);
+            Assert.AreEqual("User already verified!", errorMessage);
+        }
+
+        /* -------------------------------------------------------------------------------------
+         *         *  Change Password Tests
+         *  ------------------------------------------------------------------------------------*/
+        // Test ChangePassword method for a user that exists
+        [TestMethod()]
+        public void ChangePassword_Test_UserExists()
+        {
+            // Arrange
+            var service = new UserService(_dbContext);
+            var userId = 5;
+            var newPassword = "12345";
+
+            // Act
+            var changedPasswordUser = service.ChangePassword(userId, newPassword, out string errorMessage);
+
+            // Assert
+            Assert.IsNotNull(changedPasswordUser);
+        }
+
+        // Test ChangePassword method for a user that does not exist
+        [TestMethod()]
+        public void ChangePassword_Test_UserDoesNotExist()
+        {
+            // Arrange
+            var service = new UserService(_dbContext);
+            var userId = 100;
+            var newPassword = "12345";
+
+            // Act
+            var changedPasswordUser = service.ChangePassword(userId, newPassword, out string errorMessage);
+
+            // Assert
+            Assert.IsNull(changedPasswordUser);
+            Assert.AreEqual("User not found!", errorMessage);
+        }
+
+        // Test ChangePassword method for exception handling
+        [TestMethod()]
+        public void ChangePassword_Test_Exception()
+        {
+            // Arrange
+            var service = new UserService(_dbContextFake);
+            var userId = 5;
+            var newPassword = "12345";
+
+            // Act
+            var changedPasswordUser = service.ChangePassword(userId, newPassword, out string errorMessage);
+
+            // Assert
+            Assert.IsNull(changedPasswordUser);
+            Assert.IsNotNull(errorMessage);
+        }
+
+        /* -------------------------------------------------------------------------------------
+         *         *  Delete User Tests
+         * ------------------------------------------------------------------------------------*/
+        // Test DeleteUser method for a user that exists
+        [TestMethod()]
+        public void DeleteUser_Test_UserExists()
+        {
+            // Arrange
+            var service = new UserService(_dbContext);
+            var userId = 5;
+
+            // Act
+            var isDeleted = service.DeleteUser(userId, out string errorMessage);
+
+            // Assert
+            Assert.IsTrue(isDeleted);
+
+        }
+
+        // Test DeleteUser method for a user that does not exist
+        [TestMethod()]
+        public void DeleteUser_Test_UserDoesNotExist()
+        {
+            // Arrange
+            var service = new UserService(_dbContext);
+            var userId = 100;
+
+            // Act
+            var isDeleted = service.DeleteUser(userId, out string errorMessage);
+
+            // Assert
+            Assert.IsFalse(isDeleted);
+            Assert.AreEqual("User not found!", errorMessage);
+        }
+
+        // Test DeleteUser method for exception handling
+        [TestMethod()]
+        public void DeleteUser_Test_Exception()
+        {
+            // Arrange
+            var service = new UserService(_dbContextFake);
+            var userId = 5;
+
+            // Act
+            var isDeleted = service.DeleteUser(userId, out string errorMessage);
+
+            // Assert
+            Assert.IsFalse(isDeleted);
+            Assert.IsNotNull(errorMessage);
+        }
 
     }
 }
