@@ -1,32 +1,39 @@
-﻿namespace StudyTracker.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace StudyTracker.Models
 {
     public class User : BaseEntity
     {
+        [Display(Name = "User ID")]
         public int UserId { get; set; }
 
+        [Display(Name = "Username")]
+        [Required(ErrorMessage = "Username is required")]
         public string UserName { get; set; }
 
+        [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
+        [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
+        [Display(Name = "Email")]
         public string Email { get; set; }
+
+        [Display(Name = "Password")]
         public string PasswordHash { get; set; }
+
+        [Display(Name = "Registration Date")]
         public DateTime RegistrationDate { get; set; }
+
+        [Display(Name = "Is Verified")]
         public bool IsVerified { get; set; }
 
+        [Display(Name = "Full Name")]
         public string FullName()
         {
             return $"{FirstName} {LastName}";
         }
-
-        public ICollection<UserSession> UserSessions { get; set; }
-
-        public ICollection<Course> Courses { get; set; }
-
-        public ICollection<Subject> Subjects { get; set; }
-
-        public ICollection<Assignment> Assignments { get; set; }
 
         public User()
         {
@@ -39,11 +46,6 @@
             RegistrationDate = DateTime.Now;
             IsVerified = false;
             FullName();
-
-            UserSessions = new List<UserSession>();
-            Courses = new List<Course>();
-            Subjects = new List<Subject>();
-            Assignments = new List<Assignment>();
         }
     }
 

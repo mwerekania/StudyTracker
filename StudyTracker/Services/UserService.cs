@@ -1,4 +1,6 @@
-﻿using StudyTracker.Data;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using StudyTracker.Data;
 using StudyTracker.Models;
 
 namespace StudyTracker.Services
@@ -233,5 +235,6 @@ namespace StudyTracker.Services
                 return false;
             }
         }
+
     }
 }

@@ -1,0 +1,113 @@
+﻿@page
+@model StudyTracker.Pages.Assignments.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<div>
+        @if (ViewData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success" role="alert">
+                @ViewData["SuccessMessage"]
+            </div>
+        }
+
+        @if (ViewData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @ViewData["ErrorMessage"]
+            </div>
+        }
+    </div>
+@if (@ViewData["ErrorMessage"] == null)
+{
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Assignment[0].AssignmentId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Assignment[0].Course)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Assignment[0].Subject)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Assignment[0].Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Assignment[0].Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Assignment[0].Priority)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Assignment[0].Status)
+            </th>
+            @*
+            <th>
+                @Html.DisplayNameFor(model => model.Assignment[0].User)
+            </th>
+            *@
+            <th>
+                @Html.DisplayNameFor(model => model.Assignment[0].DueDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Assignment[0].CompletionDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Assignment) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.AssignmentId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Course.CourseName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Subject.SubjectName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Priority)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            @* 
+            <td>
+                @Html.DisplayFor(modelItem => item.User.UserName)
+            </td> 
+            *@
+
+            <td>
+                @Html.DisplayFor(modelItem => item.DueDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CompletionDate)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.AssignmentId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.AssignmentId">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.AssignmentId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+}

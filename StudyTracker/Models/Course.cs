@@ -1,11 +1,20 @@
-﻿namespace StudyTracker.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace StudyTracker.Models
 {
     public class Course : BaseEntity
     {
+        [Display(Name = "Course ID")]
         public int CourseId { get; set; }
+
+        [Display(Name = "Course Name")]
         public string CourseName { get; set; }
+
+        [Display(Name = "User ID")]
         public int UserId { get; set; }
 
-        public ICollection<Subject> Subjects { get; set; }
+        [Display(Name = "User")]
+        public User User { get; set; }
+
     }
 }

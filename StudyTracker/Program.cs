@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using StudyTracker.Data;
+using StudyTracker.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,12 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddRazorPages();
+
+builder.Services.AddScoped<AssignmentService>();
+builder.Services.AddScoped<CommonServices>();
+builder.Services.AddScoped<SubjectService>();
+builder.Services.AddScoped<UserService>();
+
 
 var app = builder.Build();
 

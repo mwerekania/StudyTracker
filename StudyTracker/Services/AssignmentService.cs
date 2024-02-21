@@ -1,6 +1,7 @@
 ﻿using StudyTracker.Data;
 using StudyTracker.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Collections;
 
 namespace StudyTracker.Services
 {
@@ -12,7 +13,6 @@ namespace StudyTracker.Services
         {
             _dbcontext = dbContext;
         }
-
 
         public Assignment? AddAssignment(Assignment assignment, out string errorMessage)
         {
@@ -95,7 +95,7 @@ namespace StudyTracker.Services
         }
 
 
-        public IEnumerable<Assignment>? GetAllAssignmentsByUserId(int userId, out string errorMessage)
+        public IList<Assignment>? GetAllAssignmentsByUserId(int userId, out string errorMessage)
         {
             try
             {
@@ -114,7 +114,11 @@ namespace StudyTracker.Services
 
             try
             {
-                IEnumerable<Assignment> assignments = _dbcontext.Assignments.Where(a => a.UserId == userId).ToList();
+                IList<Assignment> assignments = _dbcontext.Assignments
+                    .Include(a => a.Course)
+                    .Include(a => a.Subject)
+                    .Where(a => a.UserId == userId && a.DateDeleted == null)
+                    .ToList();
 
                 if (assignments.Count() == 0)
                 {
@@ -133,6 +137,7 @@ namespace StudyTracker.Services
                 return null;
             }
         }
+
 
         // Update an assignment
         public Assignment? UpdateAssignment(Assignment assignment, out string errorMessage)

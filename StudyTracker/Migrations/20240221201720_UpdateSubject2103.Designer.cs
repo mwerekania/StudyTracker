@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudyTracker.Data;
 
@@ -11,9 +12,11 @@ using StudyTracker.Data;
 namespace StudyTracker.Migrations
 {
     [DbContext(typeof(StudyTrackerDbContext))]
-    partial class StudyTrackerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240221201720_UpdateSubject2103")]
+    partial class UpdateSubject2103
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,9 +35,6 @@ namespace StudyTracker.Migrations
 
                     b.Property<DateTime?>("CompletionDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("DateAdded")
                         .HasColumnType("datetime2");
@@ -69,8 +69,6 @@ namespace StudyTracker.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("AssignmentId");
-
-                    b.HasIndex("CourseId");
 
                     b.HasIndex("SubjectId");
 
@@ -134,9 +132,14 @@ namespace StudyTracker.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("SubjectId");
 
                     b.HasIndex("CourseId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Subjects");
                 });
@@ -189,53 +192,110 @@ namespace StudyTracker.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("StudyTracker.Models.UserSession", b =>
+                {
+                    b.Property<int>("UserSessionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserSessionId"));
+
+                    b.Property<DateTime>("DateAdded")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateDeleted")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpirationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SessionToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserSessionId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserSession");
+                });
+
             modelBuilder.Entity("StudyTracker.Models.Assignment", b =>
                 {
-                    b.HasOne("StudyTracker.Models.Course", "Course")
-                        .WithMany()
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("StudyTracker.Models.Subject", "Subject")
-                        .WithMany()
+                    b.HasOne("StudyTracker.Models.Subject", "subject")
+                        .WithMany("Assignments")
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("StudyTracker.Models.User", "User")
-                        .WithMany()
+                        .WithMany("Assignments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Course");
-
-                    b.Navigation("Subject");
-
                     b.Navigation("User");
+
+                    b.Navigation("subject");
                 });
 
             modelBuilder.Entity("StudyTracker.Models.Course", b =>
                 {
-                    b.HasOne("StudyTracker.Models.User", "User")
-                        .WithMany()
+                    b.HasOne("StudyTracker.Models.User", null)
+                        .WithMany("Courses")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("StudyTracker.Models.Subject", b =>
                 {
                     b.HasOne("StudyTracker.Models.Course", "Course")
-                        .WithMany()
+                        .WithMany("Subjects")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("StudyTracker.Models.User", null)
+                        .WithMany("Subjects")
+                        .HasForeignKey("UserId");
+
                     b.Navigation("Course");
+                });
+
+            modelBuilder.Entity("StudyTracker.Models.UserSession", b =>
+                {
+                    b.HasOne("StudyTracker.Models.User", null)
+                        .WithMany("UserSessions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("StudyTracker.Models.Course", b =>
+                {
+                    b.Navigation("Subjects");
+                });
+
+            modelBuilder.Entity("StudyTracker.Models.Subject", b =>
+                {
+                    b.Navigation("Assignments");
+                });
+
+            modelBuilder.Entity("StudyTracker.Models.User", b =>
+                {
+                    b.Navigation("Assignments");
+
+                    b.Navigation("Courses");
+
+                    b.Navigation("Subjects");
+
+                    b.Navigation("UserSessions");
                 });
 #pragma warning restore 612, 618
         }

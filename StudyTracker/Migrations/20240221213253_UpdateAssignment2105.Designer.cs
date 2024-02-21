@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudyTracker.Data;
 
@@ -11,9 +12,11 @@ using StudyTracker.Data;
 namespace StudyTracker.Migrations
 {
     [DbContext(typeof(StudyTrackerDbContext))]
-    partial class StudyTrackerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240221213253_UpdateAssignment2105")]
+    partial class UpdateAssignment2105
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
