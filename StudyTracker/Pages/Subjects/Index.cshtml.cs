@@ -9,32 +9,27 @@ using StudyTracker.Data;
 using StudyTracker.Models;
 using StudyTracker.Services;
 
-namespace StudyTracker.Pages.Assignments
+namespace StudyTracker.Pages.Subjects
 {
     public class IndexModel : PageModel
     {
-        private readonly AssignmentService _assignmentService;
+        private readonly SubjectService _subjectService;
 
-        public IndexModel(AssignmentService assignmentService)
+        public IndexModel( SubjectService subjectService)
         {
-            _assignmentService = assignmentService;
+            _subjectService = subjectService;
         }
 
         public int UserID { get; set; }
 
-        public IList<Assignment> Assignment { get;set; } = default!;
+        public IList<Subject> Subject { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
             // Get the current user's ID
             UserID = 1002; // Replace with the current user's ID
 
-            Assignment =  _assignmentService.GetAllAssignmentsByUserId(UserID, out string errorMessage);
-
-            if (!string.IsNullOrEmpty(errorMessage))
-            {
-                ViewData["ErrorMessage"] = errorMessage;
-            }
+            Subject = (IList<Subject>)_subjectService.GetSubjectsWithCoursesAsync(UserID, out string errorMessage);
         }
     }
 }

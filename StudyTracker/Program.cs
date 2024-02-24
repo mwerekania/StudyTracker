@@ -24,8 +24,10 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddScoped<AssignmentService>();
 builder.Services.AddScoped<CommonServices>();
+builder.Services.AddScoped<CourseService>();
 builder.Services.AddScoped<SubjectService>();
 builder.Services.AddScoped<UserService>();
+
 
 
 var app = builder.Build();

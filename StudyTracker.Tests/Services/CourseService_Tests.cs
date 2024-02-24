@@ -4,6 +4,7 @@ using StudyTracker.Models;
 using StudyTracker.Services;
 using Moq;
 using StudyTracker.Data;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 
 namespace StudyTracker.Tests
 {
@@ -11,15 +12,49 @@ namespace StudyTracker.Tests
     public class CourseService_Tests
     {
         private readonly StudyTrackerDbContext _dbContext;
+        private readonly StudyTrackerDbContext _dbContextFake;
 
         public CourseService_Tests()
         {
             var options = new DbContextOptionsBuilder<StudyTrackerDbContext>()
                .UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=StudyTracker;Trusted_Connection=True;MultipleActiveResultSets=true")
                .Options;
+
+            var fakeOptions = new DbContextOptionsBuilder<StudyTrackerDbContext>()
+               .UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=StudyTrackerTest;Trusted_Connection=True;MultipleActiveResultSets=true")
+               .Options;
+
             // Initialize  DbContext with a test database connection
             _dbContext = new StudyTrackerDbContext(options); // Provide connection string or options if necessary
+            _dbContextFake = new StudyTrackerDbContext(fakeOptions); //
         }
+
+        /*--------------------------------------------------------------------------------
+         *  Tests for GetCoursesByUserIDAsync method
+         *  ---------------------------------------------------------------------------------
+         */
+
+
+        // Test method to verify that the GetCoursesByUserIDAsync method returns the correct courses for a user
+        [TestMethod]
+        public void GetCoursesByUserIDAsync_ExistingUserId_ReturnsCourses()
+        {
+            // Arrange
+            var service = new CourseService(_dbContext);
+            int userId = 2;
+
+            // Act
+            var courses = service.GetCoursesByUserIDAsync(userId).Result;
+
+            // Assert
+            Assert.IsNotNull(courses);
+            Assert.IsTrue(courses.Count > 0);
+            foreach (var course in courses)
+            {
+                Assert.AreEqual(userId, course.UserId);
+            }
+        }
+
 
 
         [TestMethod()]
@@ -40,23 +75,83 @@ namespace StudyTracker.Tests
             Assert.AreEqual(userId, addedCourse.UserId);
             Assert.IsNotNull(addedCourse.DateAdded);
         }
-        /*
-        [TestInitialize]
-        public void TestInitialize()
+
+        // test of GetCoursesByUserIDAsync method exists
+        [TestMethod()]
+        public void GetCoursesByUserIDAsync_Exists_Test()
         {
+            // Arrange
+            var mockCourseService = new Mock<CourseService>();
 
+            // Act
+            var methodInfo = typeof(CourseService).GetMethod("GetCoursesByUserIDAsync");
 
-            // Optionally, you can add some sample data to the test database here
-            _dbContext.Courses.AddRange(new[]
-            {
-            new Course { CourseName = "Math", UserId = 2 },
-            new Course { CourseName = "Science", UserId = 2 },
-            // Add more sample courses as needed
-            });
-
-            _dbContext.SaveChanges();
+            // Assert
+            Assert.IsNotNull(methodInfo);
         }
-        */
+
+        // test GetCoursesByUserIDAsync method returns Task
+        [TestMethod()]
+        public void GetCoursesByUserIDAsync_ReturnsTask_Test()
+        {
+            // Arrange
+            var mockCourseService = new Mock<CourseService>();
+
+            // Act
+            var methodInfo = typeof(CourseService).GetMethod("GetCoursesByUserIDAsync");
+
+            // Assert
+            Assert.AreEqual(typeof(Task<IList<Course>>), methodInfo.ReturnType);
+        }
+
+        // test GetCoursesByUserIDAsync method returns Course list
+        [TestMethod()]
+        public void GetCoursesByUserIDAsync_ReturnsCourseList_Test()
+        {
+            // Arrange
+            var mockCourseService = new Mock<CourseService>();
+
+            // Act
+            var methodInfo = typeof(CourseService).GetMethod("GetCoursesByUserIDAsync");
+
+            // Assert
+            Assert.AreEqual(typeof(IList<Course>), methodInfo.ReturnType.GetGenericArguments()[0]);
+        }
+
+        // test GetCoursesByUserIDAsync method returns Course list for userID
+        [TestMethod()]
+        public void GetCoursesByUserIDAsync_ReturnsCourseListForUserID_Test()
+        {
+            // Arrange
+            var mockCourseService = new Mock<CourseService>();
+
+            // Act
+            var methodInfo = typeof(CourseService).GetMethod("GetCoursesByUserIDAsync");
+
+            // Assert
+            Assert.IsNotNull(methodInfo.GetParameters());
+            Assert.AreEqual(1, methodInfo.GetParameters().Length);
+            Assert.AreEqual(typeof(int?), methodInfo.GetParameters()[0].ParameterType);
+        }
+ 
+
+        // test GetCoursesByUserIDAsync method accepts userId as parameter  
+        [TestMethod()]
+        public void GetCoursesByUserIDAsync_AcceptsUserId_Test()
+        {
+            // Arrange
+            var mockCourseService = new Mock<CourseService>();
+
+            // Act
+            var methodInfo = typeof(CourseService).GetMethod("GetCoursesByUserIDAsync");
+
+            // Assert
+            Assert.IsNotNull(methodInfo.GetParameters());
+            Assert.AreEqual(1, methodInfo.GetParameters().Length);
+            Assert.AreEqual(typeof(int?), methodInfo.GetParameters()[0].ParameterType);
+        }
+
+
 
 
         // Test method to verify that the GetCourseById method returns the correct course
@@ -65,7 +160,7 @@ namespace StudyTracker.Tests
         {
             // Arrange
             var service = new CourseService(_dbContext);
-            int courseId = 4;
+            int courseId = 5;
 
             // Act
             var course = service.GetCourseById(courseId);
@@ -73,7 +168,7 @@ namespace StudyTracker.Tests
             // Assert
             Assert.IsNotNull(course);
             Assert.AreEqual(courseId, course.CourseId);
-            Assert.AreEqual("Mathematics", course.CourseName);
+            Assert.AreEqual("Economics", course.CourseName);
             // Add more assertions as needed to verify other properties of the course
         }
 

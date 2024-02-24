@@ -1,4 +1,5 @@
-﻿using StudyTracker.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using StudyTracker.Data;
 using StudyTracker.Models;
 
 namespace StudyTracker.Services
@@ -40,7 +41,10 @@ namespace StudyTracker.Services
         {
             try
             {
-                Subject subject = _dbcontext.Subjects.FirstOrDefault(s => s.SubjectId == subjectId);
+                Subject subject = _dbcontext.Subjects
+                    .Include(s => s.Course)
+                    .FirstOrDefault(s => s.SubjectId == subjectId);
+
                 errorMessage = "";
                 if (subject == null)
                 {
@@ -51,6 +55,34 @@ namespace StudyTracker.Services
                 {
                     errorMessage = "";
                     return subject;
+                }
+            }
+            catch (System.Exception ex)
+            {
+                errorMessage = ex.Message;
+                return null;
+            }
+        }
+
+        // Get all subjects by User ID
+        public IList<Subject> GetSubjectsWithCoursesAsync(int userId, out string errorMessage)
+        {
+            try
+            {
+                IList<Subject> subjects = _dbcontext.Subjects
+                    .Include(s => s.Course)
+                    .Where(s => s.Course.UserId == userId && s.DateDeleted == null)
+                    .ToList();
+
+                if (subjects.Count() == 0)
+                {
+                    errorMessage = "No subjects found";
+                    return null;
+                }
+                else
+                {
+                    errorMessage = "";
+                    return (IList<Subject>)subjects;
                 }
             }
             catch (System.Exception ex)
@@ -84,7 +116,7 @@ namespace StudyTracker.Services
             }
         }
 
-        public Subject? UpdateSubject(int subjectId, string subjectName, out string errorMessage)
+        public Subject? UpdateSubject(int subjectId, int courseId, string subjectName, out string errorMessage)
         {
             try
             {
@@ -92,6 +124,7 @@ namespace StudyTracker.Services
 
                 if (subject != null)
                 {
+                    subject.CourseId = courseId;
                     subject.SubjectName = subjectName;
                     subject.DateModified = DateTime.Now;
 

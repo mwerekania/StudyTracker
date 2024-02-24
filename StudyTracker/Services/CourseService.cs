@@ -38,6 +38,18 @@ namespace StudyTracker.Services
             return _dbcontext.Courses.ToList();
         }
 
+
+        public async Task<IList<Course>> GetCoursesByUserIDAsync(int? userID = 0)
+        {
+            var courses = await _dbcontext.Courses
+                .Include(c => c.User)
+                .Where(c => c.UserId == userID && c.DateDeleted == null)
+                .ToListAsync();
+            return courses;
+        }
+
+
+
         public Course UpdateCourse(int courseId, string courseName)
         {
             Course course = _dbcontext.Courses.FirstOrDefault(c => c.CourseId == courseId);

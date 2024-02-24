@@ -41,12 +41,8 @@ namespace StudyTracker.Pages.Assignments
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                PopulateDropDowns();
-                ViewData["ErrorMessage"] = "Please correct the errors.";
-                //return Page();
-            }
+            PopulateDropDowns();
+            ViewData["ErrorMessage"] = "Please correct the errors.";
 
             _assignmentService.AddAssignment(Assignment, out string errorMessage);
 
@@ -60,11 +56,6 @@ namespace StudyTracker.Pages.Assignments
             {
                 return RedirectToPage("./Index");
             }
-
-           // _context.Assignments.Add(Assignment);
-            ///await _context.SaveChangesAsync();
-
-            //return RedirectToPage("./Index");
         }
 
         private void PopulateDropDowns()
