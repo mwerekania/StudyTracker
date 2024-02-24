@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -16,21 +17,30 @@ namespace StudyTracker.Pages.Subjects
     {
         private readonly SubjectService _subjectService;
         private readonly CommonServices _commonServices;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public EditModel(SubjectService subjectService, CommonServices commonServices)
+        public EditModel(SubjectService subjectService, CommonServices commonServices, UserManager<IdentityUser> userManager)
         {
             _subjectService = subjectService;
             _commonServices = commonServices;
+            _userManager = userManager;
         }
 
         [BindProperty]
         public Subject Subject { get; set; } = default!;
 
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            // Get user id
-            UserId = 1002; // Replace with the current user's ID
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (user == null)
+            {
+                return RedirectToPage("/Account/Login", new { area = "Identity" });
+            }
+            else
+            {
+                UserId = user.Id;
+            }
 
             if (id == null)
             {
@@ -46,7 +56,7 @@ namespace StudyTracker.Pages.Subjects
             }
             Subject = subject;
 
-            ViewData["CourseId"] = _commonServices.GetCoursesSelectList(UserId);
+            ViewData["CourseId"] = _commonServices.GetCoursesSelectList(UserId.ToString());
 
             return Page();
         }

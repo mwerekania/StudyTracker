@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -14,13 +15,12 @@ namespace StudyTracker.Pages.Subjects
     public class DeleteModel : PageModel
     {
         private readonly SubjectService _subjectService;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        private readonly StudyTracker.Data.StudyTrackerDbContext _context;
-
-        public DeleteModel(StudyTracker.Data.StudyTrackerDbContext context, SubjectService subjectService)
+        public DeleteModel(SubjectService subjectService, UserManager<IdentityUser> userManager)
         {
             _subjectService = subjectService;
-            _context = context;
+            _userManager = userManager;
         }
 
         [BindProperty]
@@ -28,6 +28,12 @@ namespace StudyTracker.Pages.Subjects
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (user == null)
+            {
+                return RedirectToPage("/Account/Login", new { area = "Identity" });
+            }
+
             if (id == null)
             {
                 return NotFound();

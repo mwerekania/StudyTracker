@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using StudyTracker.Common;
 using StudyTracker.Data;
 using StudyTracker.Models;
 using StudyTracker.Services;
@@ -15,21 +17,29 @@ namespace StudyTracker.Pages.Subjects
     {
         private readonly CommonServices _commonServices; 
         private readonly SubjectService _subjectService;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public CreateModel(SubjectService subjectService, CommonServices commonServices)
+        public CreateModel(SubjectService subjectService, CommonServices commonServices, UserManager<IdentityUser> userManager)
         {
             _subjectService = subjectService;
             _commonServices = commonServices;
+            _userManager = userManager;
         }
+        public IdentityUser CurrentUser { get; set; } = default!;
 
-        public int UserID { get; set; }
-
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
-            // Get the current user's ID
-            UserID = 1002; // Replace with the current user's ID
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (user == null)
+            {
+                return RedirectToPage("/Account/Login", new { area = "Identity" });
+            }
+            else
+            {
+                CurrentUser = user;
+            }
 
-            ViewData["CourseId"] = _commonServices.GetCoursesSelectList(UserID);
+            ViewData["CourseId"] = _commonServices.GetCoursesSelectList(user.Id);
             return Page();
         }
 
@@ -39,7 +49,7 @@ namespace StudyTracker.Pages.Subjects
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-            Subject = _subjectService.AddSubject(Subject.SubjectName, Subject.CourseId, out string errorMessage);
+            Subject = _subjectService.AddSubject(Subject.SubjectName, Subject.CourseId, Subject.AppUserID, out string errorMessage);
 
             return RedirectToPage("./Index");
         }

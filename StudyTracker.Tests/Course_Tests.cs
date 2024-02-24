@@ -11,7 +11,7 @@ namespace StudyTracker.Tests
             // Arrange
             int courseId = 1;
             string courseName = "Math";
-            int userId = 1;
+            string userId = "12";
             DateTime dateAdded = DateTime.Now;
 
             // Act
@@ -19,14 +19,14 @@ namespace StudyTracker.Tests
             {
                 CourseId = courseId,
                 CourseName = courseName,
-                UserId = userId,
+                AppUserID = userId,
                 DateAdded = dateAdded,
             };
 
             // Assert
             Assert.AreEqual(courseId, course.CourseId);
             Assert.AreEqual(courseName, course.CourseName);
-            Assert.AreEqual(userId, course.UserId);
+            Assert.AreEqual(userId, course.AppUserID);
             Assert.AreEqual(dateAdded, course.DateAdded);
         }
     }

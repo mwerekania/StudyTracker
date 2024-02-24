@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -17,20 +18,33 @@ namespace StudyTracker.Pages.Assignments
 
         private readonly CommonServices _commonServices;
         private readonly AssignmentService _assignmentService;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public CreateModel(StudyTrackerDbContext context, CommonServices commonServices, AssignmentService assignmentService)
+        public CreateModel(CommonServices commonServices, AssignmentService assignmentService, UserManager<IdentityUser> userManager)
         {
-            _context = context;
             _commonServices = commonServices;
             _assignmentService = assignmentService;
+            _userManager = userManager;
         }
 
         public int UserID { get; set; }
 
-        public IActionResult OnGet()
+        public IdentityUser CurrentUser { get; set; } = default!;
+
+        public async Task<IActionResult> OnGetAsync()
         {
-            UserID = 1002; // Replace with the current user's ID
-            PopulateDropDowns();
+            // Get User
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (user == null)
+            {
+                return RedirectToPage("/Account/Login", new { area = "Identity" });
+            }
+            else
+            {
+                CurrentUser = user;
+            }
+            
+            PopulateDropDowns(CurrentUser.Id);
 
             return Page();
         }
@@ -41,14 +55,17 @@ namespace StudyTracker.Pages.Assignments
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-            PopulateDropDowns();
-            ViewData["ErrorMessage"] = "Please correct the errors.";
-
-            _assignmentService.AddAssignment(Assignment, out string errorMessage);
+            if (!ModelState.IsValid)
+            {
+                PopulateDropDowns(Assignment.AppUserID);
+                ViewData["ErrorMessage"] = "Please correct the errors.";
+            }
+          
+            var assignment = _assignmentService.AddAssignment(Assignment, out string errorMessage);
 
             if (!string.IsNullOrEmpty(errorMessage))
             {
-                PopulateDropDowns();
+                PopulateDropDowns(Assignment.AppUserID);
                 ViewData["ErrorMessage"] = errorMessage;
                 return Page();
             }
@@ -58,10 +75,10 @@ namespace StudyTracker.Pages.Assignments
             }
         }
 
-        private void PopulateDropDowns()
+        private void PopulateDropDowns(string userID)
         {
-            ViewData["CourseId"] = _commonServices.GetCoursesSelectList(UserID);
-            ViewData["SubjectId"] = _commonServices.GetSubjectsSelectList();
+            ViewData["CourseId"] = _commonServices.GetCoursesSelectList(userID);
+            ViewData["SubjectId"] = _commonServices.GetSubjectsSelectList(userID);
             ViewData["Status"] = _commonServices.GetStatusSelectList();
             ViewData["Priority"] = _commonServices.GetPrioritySelectList();
         }   

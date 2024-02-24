@@ -35,7 +35,11 @@ namespace StudyTracker.Services
         {
             try
             {
-                Assignment assignment = _dbcontext.Assignments.FirstOrDefault(a => a.AssignmentId == assignmentId);
+                Assignment assignment = _dbcontext.Assignments
+                    .Include(a => a.Course)
+                    .Include(a => a.Subject)
+                    .FirstOrDefault(a => a.AssignmentId == assignmentId);
+
                 errorMessage = "";
                 if (assignment == null)
                 {
@@ -95,29 +99,14 @@ namespace StudyTracker.Services
         }
 
 
-        public IList<Assignment>? GetAllAssignmentsByUserId(int userId, out string errorMessage)
+        public IList<Assignment>? GetAllAssignmentsByUserId(string userId, out string errorMessage)
         {
-            try
-            {
-                var user = _dbcontext.Users.FirstOrDefault(u => u.UserId == userId);
-                if (user == null)
-                {
-                    errorMessage = "User not found";
-                    return null;
-                }
-            }
-            catch (System.Exception ex)
-            {
-                errorMessage = ex.Message;
-                return null;
-            }
-
             try
             {
                 IList<Assignment> assignments = _dbcontext.Assignments
                     .Include(a => a.Course)
                     .Include(a => a.Subject)
-                    .Where(a => a.UserId == userId && a.DateDeleted == null)
+                    .Where(a => a.AppUserID == userId && a.DateDeleted == null)
                     .ToList();
 
                 if (assignments.Count() == 0)
@@ -148,6 +137,8 @@ namespace StudyTracker.Services
 
                 if (assignmentToUpdate != null)
                 {
+                    assignmentToUpdate.CourseId = assignment.CourseId;
+                    assignmentToUpdate.SubjectId = assignment.SubjectId;
                     assignmentToUpdate.Title = assignment.Title;
                     assignmentToUpdate.Description = assignment.Description;
                     assignmentToUpdate.Priority = assignment.Priority;

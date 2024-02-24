@@ -13,7 +13,7 @@
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Assignment.UserId" class="form-control" value="@Model.UserID" />
+            <input type="hidden" asp-for="Assignment.AppUserID" class="form-control" value="@Model.CurrentUser.Id" />
             <input type="hidden" asp-for="Assignment.AssignmentId" />
             <div class="form-group">
                 <label asp-for="Assignment.CourseId" class="control-label"></label>

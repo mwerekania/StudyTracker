@@ -12,7 +12,7 @@ namespace StudyTracker.Tests
             int assignmentId = 1;
             string title = "Math Assignment";
             int subjectId = 1;
-            int userId = 1;
+            var userId = "2";
             DateTime dueDate = DateTime.Now.AddDays(7);
             Priority priority = Priority.High;
             string description = "Solve problems from chapters 1 to 5.";
@@ -24,7 +24,7 @@ namespace StudyTracker.Tests
                 AssignmentId = assignmentId,
                 Title = title,
                 SubjectId = subjectId,
-                UserId = userId,
+                AppUserID = userId,
                 DueDate = dueDate,
                 Priority = priority,
                 Description = description,
@@ -35,7 +35,7 @@ namespace StudyTracker.Tests
             Assert.AreEqual(assignmentId, assignment.AssignmentId);
             Assert.AreEqual(title, assignment.Title);
             Assert.AreEqual(subjectId, assignment.SubjectId);
-            Assert.AreEqual(userId, assignment.UserId);
+            Assert.AreEqual(userId, assignment.AppUserID);
             Assert.AreEqual(dueDate, assignment.DueDate);
             Assert.AreEqual(priority, assignment.Priority);
             Assert.AreEqual(description, assignment.Description);
@@ -52,7 +52,7 @@ namespace StudyTracker.Tests
             int defaultSubjectId = 0;
             string defaultTitle = string.Empty;
             string defaultDescription = string.Empty;
-            int defaultUserId = 0;
+            var defaultUserId = "2";
             Priority defaultPriority = Priority.Low;
             Status defaultStatus = Status.NotStarted;
 
@@ -60,7 +60,7 @@ namespace StudyTracker.Tests
             Assert.AreEqual(defaultSubjectId, assignment.SubjectId);
             Assert.AreEqual(defaultTitle, assignment.Title);
             Assert.AreEqual(defaultDescription, assignment.Description);
-            Assert.AreEqual(defaultUserId, assignment.UserId);
+            Assert.AreEqual(defaultUserId, assignment.AppUserID);
             Assert.AreEqual(defaultPriority, assignment.Priority);
             Assert.AreEqual(defaultStatus, assignment.Status);
         }

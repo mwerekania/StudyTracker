@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -14,19 +15,24 @@ namespace StudyTracker.Pages.Subjects
     public class DetailsModel : PageModel
     {
         private readonly SubjectService _subjectService;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        private readonly StudyTracker.Data.StudyTrackerDbContext _context;
-
-        public DetailsModel(StudyTracker.Data.StudyTrackerDbContext context, SubjectService subjectService)
+        public DetailsModel(SubjectService subjectService, UserManager<IdentityUser> userManager)
         {
             _subjectService = subjectService;
-            _context = context;
+            _userManager = userManager;
         }
 
         public Subject Subject { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (user == null)
+            {
+                return RedirectToPage("/Account/Login", new { area = "Identity" });
+            }
+
             if (id == null)
             {
                 return NotFound();

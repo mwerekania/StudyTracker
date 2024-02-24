@@ -33,9 +33,10 @@ namespace StudyTracker.Tests
             var service = new SubjectService(_dbContext);
             var subjectName = "Math";
             var courseId = 4;
+            var userid = "1002";
 
             // Act
-            var addedSubject = service.AddSubject(subjectName, courseId, out string errorMessage);
+            var addedSubject = service.AddSubject(subjectName, courseId, userid, out string errorMessage);
 
             // Assert
             Assert.IsNotNull(addedSubject);
@@ -49,9 +50,10 @@ namespace StudyTracker.Tests
             var service = new SubjectService(_dbContext);
             var subjectName = "Math";
             var courseId = 0;
+            var userid = "1002";
 
             // Act
-            var addedSubject = service.AddSubject(subjectName, courseId, out string errorMessage);
+            var addedSubject = service.AddSubject(subjectName, courseId, userid, out string errorMessage);
 
             // Assert
             Assert.IsNull(addedSubject);
@@ -64,9 +66,10 @@ namespace StudyTracker.Tests
             var service = new SubjectService(_dbContext);
             var subjectName = "Math";
             var courseId = 0;
+            var userId = "1002";
 
             // Act
-            var addedSubject = service.AddSubject(subjectName, courseId, out string errorMessage);
+            var addedSubject = service.AddSubject(subjectName, courseId, userId, out string errorMessage);
 
             // Assert
             Assert.IsFalse(string.IsNullOrEmpty(errorMessage));
@@ -78,9 +81,10 @@ namespace StudyTracker.Tests
             var service = new SubjectService(_dbContext);
             var subjectName = "Math";
             var courseId = 4;
+            var userId = "1002";
 
             // Act
-            var addedSubject = service.AddSubject(subjectName, courseId, out string errorMessage);
+            var addedSubject = service.AddSubject(subjectName, courseId, userId, out string errorMessage);
 
             // Assert
             Assert.IsNotNull(addedSubject.DateAdded);
@@ -177,10 +181,11 @@ namespace StudyTracker.Tests
             // Arrange
             var service = new SubjectService(_dbContext);
             int subjectId = 2006;
+            int courseId = 4;
             string newSubjectName = "Chemistry";
 
             // Act
-            var updatedSubject = service.UpdateSubject(subjectId, newSubjectName, out string errorMessage);
+            var updatedSubject = service.UpdateSubject(subjectId, courseId, newSubjectName, out string errorMessage);
 
             // Assert
             Assert.IsNotNull(updatedSubject);
@@ -197,10 +202,11 @@ namespace StudyTracker.Tests
             // Arrange
             var service = new SubjectService(_dbContext);
             int subjectId = 100;
+            int courseId = 4;
             string newSubjectName = "Chemistry";
 
             // Act
-            var updatedSubject = service.UpdateSubject(subjectId, newSubjectName, out string errorMessage);
+            var updatedSubject = service.UpdateSubject(subjectId, courseId, newSubjectName, out string errorMessage);
 
             // Assert
             Assert.IsNull(updatedSubject);
@@ -213,10 +219,11 @@ namespace StudyTracker.Tests
             // Arrange
             var service = new SubjectService(_dbContext);
             int nonExistingSubjectId = 9999;
+            int courseId = 4;
             string updatedSubjectName = "Updated Subject Name";
 
             // Act
-            var result = service.UpdateSubject(nonExistingSubjectId, updatedSubjectName, out string errorMessage);
+            var result = service.UpdateSubject(nonExistingSubjectId, courseId, updatedSubjectName, out string errorMessage);
 
             // Assert
             Assert.IsNull(result);

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudyTracker.Data;
 
@@ -11,9 +12,11 @@ using StudyTracker.Data;
 namespace StudyTracker.Migrations
 {
     [DbContext(typeof(StudyTrackerDbContext))]
-    partial class StudyTrackerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240224193909_ModifyCourse01")]
+    partial class ModifyCourse01
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -271,11 +274,16 @@ namespace StudyTracker.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("AssignmentId");
 
                     b.HasIndex("CourseId");
 
                     b.HasIndex("SubjectId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Assignments");
                 });
@@ -458,9 +466,17 @@ namespace StudyTracker.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("StudyTracker.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Course");
 
                     b.Navigation("Subject");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("StudyTracker.Models.Subject", b =>

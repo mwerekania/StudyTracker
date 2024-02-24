@@ -13,6 +13,7 @@
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Subject.AppUserID" value="@Model.CurrentUser.Id" />
             <div class="form-group">
                 <label asp-for="Subject.CourseId" class="control-label"></label>
                 <select asp-for="Subject.CourseId" class ="form-control" asp-items="ViewBag.CourseId"></select>

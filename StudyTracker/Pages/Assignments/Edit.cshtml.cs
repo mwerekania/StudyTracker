@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,41 +15,50 @@ namespace StudyTracker.Pages.Assignments
 {
     public class EditModel : PageModel
     {
-        private readonly StudyTracker.Data.StudyTrackerDbContext _context;
-
         private readonly CommonServices _commonServices;
         private readonly AssignmentService _assignmentService;
+        private readonly UserManager<IdentityUser> _userManager;
 
-
-        public EditModel(StudyTracker.Data.StudyTrackerDbContext context, CommonServices commonServices, AssignmentService assignmentService)
+        public EditModel(CommonServices commonServices, AssignmentService assignmentService, UserManager<IdentityUser> userManager)
         {
-            _context = context;
             _commonServices = commonServices;
             _assignmentService = assignmentService;
+            _userManager = userManager;
         }
 
         [BindProperty]
         public Assignment Assignment { get; set; } = default!;
 
-        public int UserID { get; set; }
+        public IdentityUser CurrentUser { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            UserID = 1002; // Replace with the current user's ID
+            // Get User
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (user == null)
+            {
+                return RedirectToPage("/Account/Login", new { area = "Identity" });
+            }
+            else
+            {
+                CurrentUser = user;
+            }
 
             if (id == null)
             {
                 return NotFound();
             }
 
-            var assignment =  await _context.Assignments.FirstOrDefaultAsync(m => m.AssignmentId == id);
+            var assignment = _assignmentService.GetAssignmentById(id.Value, out string errorMessage);
+
+            //var assignment =  await _context.Assignments.FirstOrDefaultAsync(m => m.AssignmentId == id);
             if (assignment == null)
             {
                 return NotFound();
             }
             Assignment = assignment;
 
-            PopulateDropDowns();
+            PopulateDropDowns(CurrentUser.Id);
 
             return Page();
         }
@@ -59,41 +69,29 @@ namespace StudyTracker.Pages.Assignments
         {
             if (!ModelState.IsValid)
             {
-                PopulateDropDowns();
+                PopulateDropDowns(Assignment.AppUserID);
                 //return Page();
             }
 
-            _context.Attach(Assignment).State = EntityState.Modified;
+            var assignment = _assignmentService.UpdateAssignment(Assignment, out string errorMessage);
 
-            try
+            if (!string.IsNullOrEmpty(errorMessage))
             {
-                await _context.SaveChangesAsync();
+                PopulateDropDowns(Assignment.AppUserID);
+                ViewData["ErrorMessage"] = errorMessage;
+                return Page();
             }
-            catch (DbUpdateConcurrencyException)
+            else
             {
-                if (!AssignmentExists(Assignment.AssignmentId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return RedirectToPage("./Index");
             }
 
-            return RedirectToPage("./Index");
         }
 
-        private bool AssignmentExists(int id)
+        private void PopulateDropDowns(string userId)
         {
-            return _context.Assignments.Any(e => e.AssignmentId == id);
-        }
-
-
-        private void PopulateDropDowns()
-        {
-            ViewData["CourseId"] = _commonServices.GetCoursesSelectList(UserID);
-            ViewData["SubjectId"] = _commonServices.GetSubjectsSelectList();
+            ViewData["CourseId"] = _commonServices.GetCoursesSelectList(userId);
+            ViewData["SubjectId"] = _commonServices.GetSubjectsSelectList(userId);
             ViewData["Status"] = _commonServices.GetStatusSelectList();
             ViewData["Priority"] = _commonServices.GetPrioritySelectList();
         }

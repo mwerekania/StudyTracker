@@ -41,7 +41,7 @@ namespace StudyTracker.Tests
         {
             // Arrange
             var service = new CourseService(_dbContext);
-            int userId = 2;
+            string userId = "2";
 
             // Act
             var courses = service.GetCoursesByUserIDAsync(userId).Result;
@@ -51,7 +51,7 @@ namespace StudyTracker.Tests
             Assert.IsTrue(courses.Count > 0);
             foreach (var course in courses)
             {
-                Assert.AreEqual(userId, course.UserId);
+                Assert.AreEqual(userId, course.AppUserID);
             }
         }
 
@@ -63,7 +63,7 @@ namespace StudyTracker.Tests
             // Arrange
             var service = new CourseService(_dbContext);
             var courseName = "Geography";
-            var userId = 5;
+            var userId = "5";
 
 
             // Act
@@ -72,7 +72,7 @@ namespace StudyTracker.Tests
             // Assert
             Assert.IsNotNull(addedCourse);
             Assert.AreEqual(courseName, addedCourse.CourseName);
-            Assert.AreEqual(userId, addedCourse.UserId);
+            Assert.AreEqual(userId, addedCourse.AppUserID);
             Assert.IsNotNull(addedCourse.DateAdded);
         }
 

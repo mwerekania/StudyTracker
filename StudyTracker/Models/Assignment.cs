@@ -32,11 +32,14 @@ namespace StudyTracker.Models
         [Display(Name = "Status")]
         public Status Status { get; set; }
 
+        /*
         [Display(Name = "User ID")]
         public int UserId { get; set; }
 
         [Display(Name = "User")]
         public User User { get; set; }
+
+        */
 
         [Display(Name = "Due Date")]
         public DateTime? DueDate { get; set; }
@@ -44,12 +47,16 @@ namespace StudyTracker.Models
         [Display(Name = "Completion Date")]
         public DateTime? CompletionDate { get; set; }
 
+        [Display(Name = "App User ID")]
+        [Required]
+        public string AppUserID { get; set; }
+
         public Assignment()
         {
             SubjectId = 0;
             Title = string.Empty;
             Description = string.Empty;
-            UserId = 0;
+            AppUserID = string.Empty;
             Status = Status.NotStarted;
             Priority = Priority.Low;
             DateAdded = DateTime.Now;

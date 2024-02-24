@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using StudyTracker.Models;
 using System.Reflection.Metadata;
 
 namespace StudyTracker.Data
 {
-    public class StudyTrackerDbContext : DbContext
+    public class StudyTrackerDbContext : IdentityDbContext<IdentityUser>
     {
         public StudyTrackerDbContext()
         {

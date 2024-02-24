@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,16 +15,26 @@ namespace StudyTracker.Pages.Courses
     public class CreateModel : PageModel
     {
         private readonly CourseService _courseService;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public CreateModel(CourseService courseService)
+        public CreateModel(CourseService courseService, UserManager<IdentityUser> userManager)
         {
             _courseService = courseService;
+            _userManager = userManager;
         }
-        public int UserID { get; set; }
+        public string UserID { get; set; }
 
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
-            UserID = 1002; // Replace with the current user's ID
+            // Get User
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (user == null)
+            {
+                return RedirectToPage("/Account/Login", new { area = "Identity" });
+            }
+
+            UserID = user.Id;
+
             return Page();
         }
 
@@ -31,11 +42,11 @@ namespace StudyTracker.Pages.Courses
         public Course Course { get; set; } = default!;
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
-        public async Task<IActionResult> OnPostAsync()
+        public Task<IActionResult> OnPostAsync()
         {
-            Course = _courseService.AddCourse(Course.CourseName, Course.UserId);
+            Course = _courseService.AddCourse(Course.CourseName, Course.AppUserID);
 
-            return RedirectToPage("./Index");
+            return Task.FromResult<IActionResult>(RedirectToPage("./Index"));
         }
     }
 }

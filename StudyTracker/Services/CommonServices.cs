@@ -18,19 +18,19 @@ namespace StudyTracker.Services
             return new SelectList(_dbContext.Courses, "CourseId", "CourseName");
         }
 
-        public SelectList GetCoursesSelectList(int userID)
+        public SelectList GetCoursesSelectList(string userID)
         {
-            return new SelectList(_dbContext.Courses.Where(c => c.UserId == userID), "CourseId", "CourseName");
+            return new SelectList(_dbContext.Courses.Where(c => c.AppUserID == userID && c.DateDeleted == null), "CourseId", "CourseName");
         }
 
-        public SelectList GetSubjectsSelectList()
+        public SelectList GetSubjectsSelectList(string userID)
         {
-            return new SelectList(_dbContext.Subjects, "SubjectId", "SubjectName");
+            return new SelectList(_dbContext.Subjects.Where(s => s.AppUserID == userID && s.DateDeleted == null), "SubjectId", "SubjectName");
         }
 
         public SelectList GetSubjectsSelectList(int courseId)
         {
-            return new SelectList(_dbContext.Subjects.Where(s => s.CourseId == courseId), "SubjectId", "SubjectName");
+            return new SelectList(_dbContext.Subjects.Where(s => s.CourseId == courseId && s.DateDeleted == null), "SubjectId", "SubjectName");
         }
 
         public SelectList GetUsersSelectList()

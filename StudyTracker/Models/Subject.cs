@@ -20,5 +20,8 @@ namespace StudyTracker.Models
         [Display(Name = "Subject Name")]
         public string SubjectName { get; set; }
 
+        [Display(Name = "App User ID")]
+        [Required]
+        public string AppUserID { get; set; }
     }
 }

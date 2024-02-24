@@ -13,13 +13,14 @@ namespace StudyTracker.Services
             _dbcontext = dbContext;
         }
 
-        public Subject AddSubject(string subjectName, int courseId, out string errorMessage)
+        public Subject AddSubject(string subjectName, int courseId, string userId, out string errorMessage)
         {
             Subject subject = new Subject
             {
                 SubjectName = subjectName,
                 CourseId = courseId,
-                DateAdded = DateTime.Now
+                DateAdded = DateTime.Now,
+                AppUserID = userId
             };
 
             try
@@ -65,13 +66,13 @@ namespace StudyTracker.Services
         }
 
         // Get all subjects by User ID
-        public IList<Subject> GetSubjectsWithCoursesAsync(int userId, out string errorMessage)
+        public IList<Subject> GetSubjectsWithCoursesAsync(string userId, out string errorMessage)
         {
             try
             {
                 IList<Subject> subjects = _dbcontext.Subjects
                     .Include(s => s.Course)
-                    .Where(s => s.Course.UserId == userId && s.DateDeleted == null)
+                    .Where(s => s.Course.AppUserID == userId && s.DateDeleted == null)
                     .ToList();
 
                 if (subjects.Count() == 0)

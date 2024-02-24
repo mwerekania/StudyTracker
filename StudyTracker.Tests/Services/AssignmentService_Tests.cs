@@ -43,7 +43,7 @@ namespace StudyTracker.Tests
                 Status = Status.Completed,
                 DueDate = DateTime.Now.AddDays(7),
                 CompletionDate = DateTime.Now,
-                UserId = 2,
+                AppUserID = "2",
                 SubjectId = 2013
             };
 
@@ -71,7 +71,7 @@ namespace StudyTracker.Tests
                 Status = Status.NotStarted,
                 DueDate = null,
                 CompletionDate = null,
-                UserId = 2,
+                AppUserID = "2",
                 SubjectId = 2013
             };
 
@@ -204,7 +204,7 @@ namespace StudyTracker.Tests
         {
             // Arrange
             var service = new AssignmentService(_dbContext);
-            int userId = 2;
+            var userId = "2";
 
             // Act
             var result = service.GetAllAssignmentsByUserId(userId, out string errorMessage);
@@ -219,7 +219,7 @@ namespace StudyTracker.Tests
         {
             // Arrange
             var service = new AssignmentService(_dbContext);
-            int userId = 5;
+            var userId = "2";
 
             // Act
             var result = service.GetAllAssignmentsByUserId(userId, out string errorMessage);
@@ -235,7 +235,7 @@ namespace StudyTracker.Tests
         {
             // Arrange
             var service = new AssignmentService(_dbContextFake);
-            int userId = 3;
+            var userId = "2";
 
             // Act
             var result = service.GetAllAssignmentsByUserId(userId, out string errorMessage);
@@ -251,7 +251,7 @@ namespace StudyTracker.Tests
         {
             // Arrange
             var service = new AssignmentService(_dbContext);
-            int userId = 1000;
+            var userId = "2";
 
             // Act
             var result = service.GetAllAssignmentsByUserId(userId, out string errorMessage);
@@ -279,7 +279,7 @@ namespace StudyTracker.Tests
                 Status = Status.Completed,
                 DueDate = DateTime.Now.AddDays(7),
                 CompletionDate = DateTime.Now,
-                UserId = 2,
+                AppUserID = "2",
                 SubjectId = 2013
             };
 
@@ -306,7 +306,7 @@ namespace StudyTracker.Tests
                Status = Status.Completed,
                DueDate = DateTime.Now.AddDays(7),
                CompletionDate = DateTime.Now,
-               UserId = 2,
+               AppUserID = "2",
                SubjectId = 2013
             };
 
@@ -336,7 +336,7 @@ namespace StudyTracker.Tests
                 Status = Status.Completed,
                 DueDate = DateTime.Now.AddDays(7),
                 CompletionDate = DateTime.Now,
-                UserId = 2,
+                AppUserID = "2",
                 SubjectId = 2013
             };
 

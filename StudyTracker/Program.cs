@@ -7,8 +7,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
 
 builder.Services.AddDbContext<StudyTrackerDbContext>(options =>
 {
@@ -16,10 +14,10 @@ builder.Services.AddDbContext<StudyTrackerDbContext>(options =>
     options.EnableSensitiveDataLogging(); // Enable sensitive data logging
 });
 
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddEntityFrameworkStores<StudyTrackerDbContext>();
+
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddRazorPages();
 
 builder.Services.AddScoped<AssignmentService>();

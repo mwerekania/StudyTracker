@@ -13,12 +13,12 @@ namespace StudyTracker.Services
             _dbcontext = dbContext;
         }
 
-        public Course AddCourse(string courseName, int userId)
+        public Course AddCourse(string courseName, string userId)
         {
             Course course = new Course
             {
                 CourseName = courseName,
-                UserId = userId,
+                AppUserID = userId,
                 DateAdded = DateTime.Now
             };
 
@@ -39,11 +39,10 @@ namespace StudyTracker.Services
         }
 
 
-        public async Task<IList<Course>> GetCoursesByUserIDAsync(int? userID = 0)
+        public async Task<IList<Course>> GetCoursesByUserIDAsync(string? userID = null)
         {
             var courses = await _dbcontext.Courses
-                .Include(c => c.User)
-                .Where(c => c.UserId == userID && c.DateDeleted == null)
+                .Where(c => c.AppUserID == userID && c.DateDeleted == null)
                 .ToListAsync();
             return courses;
         }

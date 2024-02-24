@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -14,12 +15,12 @@ namespace StudyTracker.Pages.Courses
     public class DeleteModel : PageModel
     {
         private readonly CourseService _courseService;
-        private readonly StudyTracker.Data.StudyTrackerDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public DeleteModel(StudyTracker.Data.StudyTrackerDbContext context, CourseService courseService)
+        public DeleteModel(CourseService courseService, UserManager<IdentityUser> userManager)
         {
-            _context = context;
             _courseService = courseService;
+            _userManager = userManager;
         }
 
         [BindProperty]
@@ -27,13 +28,19 @@ namespace StudyTracker.Pages.Courses
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
+            // Get User
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (user == null)
+            {
+                return RedirectToPage("/Account/Login", new { area = "Identity" });
+            }
+
             if (id == null)
             {
                 return NotFound();
             }
 
             var course = _courseService.GetCourseById(id.Value);
-
 
             if (course == null)
             {
@@ -54,16 +61,6 @@ namespace StudyTracker.Pages.Courses
             }
 
             _courseService.DeleteCourse(id.Value);
-
-            /*
-             * var course = await _context.Courses.FindAsync(id);
-            if (course != null)
-            {
-                Course = course;
-                _context.Courses.Remove(Course);
-                await _context.SaveChangesAsync();
-            }
-            */
 
             return RedirectToPage("./Index");
         }
