@@ -41,20 +41,20 @@ namespace StudyTracker.Pages
                 CurrentUser = user;
             }
 
-
             Assignments = _assignmentService.GetAllAssignmentsByUserId(CurrentUser.Id, out string errorMessage);
 
             if (!string.IsNullOrEmpty(errorMessage))
             {
                 ViewData["ErrorMessage"] = errorMessage;
             }
+            else
+            {
+                UpcomingAssignments = Assignments.Count > 0 ? Assignments.Where(a => a.Status == Status.NotStarted).ToList() : new List<Assignment>();
 
+                CompletedAssignments = Assignments.Count > 0 ? Assignments.Where(a => a.Status == Status.Completed).ToList() : new List<Assignment>();
 
-            UpcomingAssignments = Assignments.Count > 0 ? Assignments.Where(a => a.Status == Status.NotStarted).ToList() : new List<Assignment>();
-
-            CompletedAssignments = Assignments.Count > 0 ? Assignments.Where(a => a.Status == Status.Completed).ToList() : new List<Assignment>();
-
-            InProgressAssignments = Assignments.Count > 0 ? Assignments.Where(a => a.Status == Status.InProgress).ToList() : new List<Assignment>();
+                InProgressAssignments = Assignments.Count > 0 ? Assignments.Where(a => a.Status == Status.InProgress).ToList() : new List<Assignment>();
+            }
 
             return Page();
         }

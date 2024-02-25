@@ -44,7 +44,7 @@
 
 
                         </td>
-                        <td>14.02.2024</td>
+                        <td>@item.DueDate?.ToString("dd-MMM-yyyy")</td>
                     </tr>
                     }
                 </tbody>
@@ -56,7 +56,7 @@
                 }
             }
         </div>
-        <div class="col-md">
+        <div class="col-md">    
             <h2>Assignments In Progress</h2>
             @if (Model.InProgressAssignments.Count > 0)
             {
@@ -82,7 +82,7 @@
 
 
                                 </td>
-                                <td>14.02.2024</td>
+                                <td>@item.DueDate?.ToString("dd-MMM-yyyy")</td>
                             </tr>
                         }
                     </tbody>
@@ -116,10 +116,8 @@
                                             @item.Title
                                         </a>
                                     </span>
-
-
                                 </td>
-                                <td>14.02.2024</td>
+                                <td>@item.DueDate?.ToString("dd-MMM-yyyy")</td>
                             </tr>
                         }
                     </tbody>
