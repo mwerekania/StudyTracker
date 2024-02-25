@@ -169,7 +169,7 @@ namespace StudyTracker.Tests
         {
             // Arrange
             var service = new AssignmentService(_dbContext);
-            int subjectId = 2016;
+            int subjectId = 3002;
 
             // Act
             var result = service.GetAllAssignmentsBySubjectId(subjectId, out string errorMessage);
@@ -204,7 +204,7 @@ namespace StudyTracker.Tests
         {
             // Arrange
             var service = new AssignmentService(_dbContext);
-            var userId = "2";
+            var userId = "test1";
 
             // Act
             var result = service.GetAllAssignmentsByUserId(userId, out string errorMessage);
@@ -251,7 +251,7 @@ namespace StudyTracker.Tests
         {
             // Arrange
             var service = new AssignmentService(_dbContext);
-            var userId = "2";
+            var userId = "5";
 
             // Act
             var result = service.GetAllAssignmentsByUserId(userId, out string errorMessage);
@@ -375,7 +375,7 @@ namespace StudyTracker.Tests
         {
             // Arrange
             var service = new AssignmentService(_dbContext);
-            int assignmentId = 7;
+            int assignmentId = 8;
 
             // Act
             var result = service.DeleteAssignment(assignmentId, out string errorMessage, out bool isSuccess);

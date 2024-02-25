@@ -41,7 +41,7 @@ namespace StudyTracker.Tests
         {
             // Arrange
             var service = new CourseService(_dbContext);
-            string userId = "2";
+            string userId = "1";
 
             // Act
             var courses = service.GetCoursesByUserIDAsync(userId).Result;
@@ -131,7 +131,7 @@ namespace StudyTracker.Tests
             // Assert
             Assert.IsNotNull(methodInfo.GetParameters());
             Assert.AreEqual(1, methodInfo.GetParameters().Length);
-            Assert.AreEqual(typeof(int?), methodInfo.GetParameters()[0].ParameterType);
+            Assert.AreEqual(typeof(string), methodInfo.GetParameters()[0].ParameterType);
         }
  
 
@@ -148,7 +148,7 @@ namespace StudyTracker.Tests
             // Assert
             Assert.IsNotNull(methodInfo.GetParameters());
             Assert.AreEqual(1, methodInfo.GetParameters().Length);
-            Assert.AreEqual(typeof(int?), methodInfo.GetParameters()[0].ParameterType);
+            Assert.AreEqual(typeof(string), methodInfo.GetParameters()[0].ParameterType);
         }
 
 

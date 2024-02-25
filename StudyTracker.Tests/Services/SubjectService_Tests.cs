@@ -109,7 +109,7 @@ namespace StudyTracker.Tests
             // Assert
             Assert.IsNotNull(subject);
             Assert.AreEqual(subjectId, subject.SubjectId);
-            Assert.AreEqual("Math", subject.SubjectName);
+            Assert.AreEqual("Chemistry", subject.SubjectName);
         }
 
         // Test for GetSubjectById method for a non-existing subject
@@ -241,7 +241,7 @@ namespace StudyTracker.Tests
             // Arrange
             var service = new SubjectService(_dbContext);
             int subjectId = 2010;
-            string subjectName = "Math";
+            string subjectName = "Programming with Data";
             int courseId = 4;
 
             // Act
@@ -294,7 +294,7 @@ namespace StudyTracker.Tests
         {
             // Arrange
             var service = new SubjectService(_dbContext);
-            int subjectId = 2006;
+            int subjectId = 2013;
 
             // Act
             var subject = service.DeleteSubject(subjectId, out string errorMessage, out bool isSuccess);

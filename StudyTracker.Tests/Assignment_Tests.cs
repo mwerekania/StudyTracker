@@ -52,7 +52,7 @@ namespace StudyTracker.Tests
             int defaultSubjectId = 0;
             string defaultTitle = string.Empty;
             string defaultDescription = string.Empty;
-            var defaultUserId = "2";
+            var defaultUserId = string.Empty;
             Priority defaultPriority = Priority.Low;
             Status defaultStatus = Status.NotStarted;
 
@@ -83,7 +83,7 @@ namespace StudyTracker.Tests
         public void Priority_Enum_HasThreeOptions()
         {
             // Arrange
-            int expectedCount = 3;
+            int expectedCount = 4;
 
             // Act
             int actualCount = Enum.GetNames(typeof(Priority)).Length;
