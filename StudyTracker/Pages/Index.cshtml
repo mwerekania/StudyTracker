@@ -4,7 +4,132 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container">
+    <div class="row">
+        <h1 class="display-4">Welcome to StudyTracker</h1>
+        <p class="lead">This is a simple web application to help you keep track of your studies.</p>
+    </div>
+    <div class="row align-items-start row_dashboard">
+        <div class="col-md">
+            <h2>Upcoming Assignments</h2>
+            @if (ViewData["ErrorMessages"] != null)
+            {
+                <div class="alert alert-danger" role="alert">
+                    @ViewData["ErrorMessages"]
+                </div>
+            }
+            @if (@ViewData["ErrorMessage"] == null)
+            {
+                @if (Model.UpcomingAssignments.Count > 0)
+                {
+                    <table class="table_dashboard">
+                <thead>
+                    <tr>
+                        <th>Assignment</th>
+                        <th>Due Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.UpcomingAssignments)
+                    {
+                    <tr>
+                        <td>
+                            <span class="course" >@item.Course.CourseName</span>
+                            <span class="subject" >@item.Subject.SubjectName</span>
+                            <span class="assignment-title">                            
+                                <a asp-page="./Assignments/Details" asp-route-id="@item.AssignmentId">
+                                    @item.Title
+                                </a>
+                            </span>
+
+
+                        </td>
+                        <td>14.02.2024</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+                }
+                else
+                {
+                    <p>No upcoming assignments</p>
+                }
+            }
+        </div>
+        <div class="col-md">
+            <h2>Assignments In Progress</h2>
+            @if (Model.InProgressAssignments.Count > 0)
+            {
+                <table class="table_dashboard">
+                    <thead>
+                        <tr>
+                            <th>Assignment</th>
+                            <th>Due Date</th>
+                        </tr> 
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.InProgressAssignments)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="course">@item.Course.CourseName</span>
+                                    <span class="subject">@item.Subject.SubjectName</span>
+                                    <span class="assignment-title">
+                                        <a asp-page="./Assignments/Details" asp-route-id="@item.AssignmentId">
+                                            @item.Title
+                                        </a>
+                                    </span>
+
+
+                                </td>
+                                <td>14.02.2024</td>
+                            </tr>
+                        }
+                    </tbody>
+            </table>
+            }
+            else
+            {
+                <p>No assignments in progress</p>
+            }
+        </div>
+        <div class="col-md">
+            <h2>Completed Assignments</h2>
+            @if (Model.CompletedAssignments.Count > 0)
+            {
+                <table class="table_dashboard">
+                    <thead>
+                        <tr>
+                            <th>Assignment</th>
+                            <th>Due Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.CompletedAssignments)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="course">@item.Course.CourseName</span>
+                                    <span class="subject">@item.Subject.SubjectName</span>
+                                    <span class="assignment-title">
+                                        <a asp-page="./Assignments/Details" asp-route-id="@item.AssignmentId">
+                                            @item.Title
+                                        </a>
+                                    </span>
+
+
+                                </td>
+                                <td>14.02.2024</td>
+                            </tr>
+                        }
+                    </tbody>
+            </table>
+            }
+            else
+            {
+                <p>No completed assignments</p>
+            }
+        </div>
+    </div>
 </div>
+ 

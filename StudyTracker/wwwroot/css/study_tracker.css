@@ -1,0 +1,62 @@
+﻿body {
+   
+}
+
+.row_dashboard {
+    background-color: navajowhite;
+    border-radius: 10px; /* Adding curve shape with border-radius */
+    padding-bottom: 10px; /* Adding margin at the bottom */
+}
+
+.table_dashboard {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    max-height: 50px; /* Set a fixed height for the table */
+    overflow-y: auto; /* Add vertical scrollbar if content exceeds the fixed height */
+}
+
+.table_dashboard th {
+    background-color: #333; /* Dark background color */
+    color: #fff; /* White font color */
+}
+
+.table_dashboard th,
+.table_dashboard td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd; /* Add a bottom border to each cell */
+}
+
+.table_dashboard th:last-child,
+.table_dashboard td:last-child {
+    border-right: 1px solid #ddd; /* Add a right border to the last cell in each row */
+}
+
+.table_dashboard .course {
+    font-weight: bold; /* Example style for the course */
+    color: blue; /* Example color for the course */
+}
+
+.table_dashboard .subject {
+    font-style: italic; /* Example style for the subject */
+    color: green; /* Example color for the subject */
+}
+
+.table_dashboard .assignment-title {
+    text-decoration: underline; /* Example style for the assignment title */
+    color: red; /* Example color for the assignment title */
+}
+
+
+.table_dashboard .course,
+.table_dashboard .subject,
+.table_dashboard .assignment-title {
+    display: block; /* Add line break after each span item */
+}
+
+.table_dashboard .subject,
+.table_dashboard .assignment-title {
+    margin-top: 5px; /* Add margin between span items */
+}
