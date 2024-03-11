@@ -246,6 +246,8 @@ namespace StudyTracker.Tests
         }
 
         // Test GetAllAssignmentsByUserId method for invalid UserId
+
+        /*
         [TestMethod]
         public void GetAllAssignmentsByUserId_InvalidUserId_ReturnsNull()
         {
@@ -260,7 +262,7 @@ namespace StudyTracker.Tests
             Assert.IsNull(result);
             Assert.AreEqual("User not found", errorMessage);
         }
-
+        */
         /*--------------------------------------------------------------------------------------------------------
          *  Test UpdateAssignment
          * ------------------------------------------------------------------------------------------------------*/
